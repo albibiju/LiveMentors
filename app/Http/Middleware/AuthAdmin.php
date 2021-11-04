@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+
+class AuthAdmin
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */
+    public function handle(Request $request, Closure $next)
+    {
+        if (session('utype') === 'admin')
+        {
+            return $next($request);
+        }
+        /* elseif (session('utype') === 'consultant')
+         {
+             return $next($request);
+         } */
+        else
+        {
+            session()->flush();
+            return redirect()->route('login');
+        }
+
+        return $next($request);
+    }
+}
